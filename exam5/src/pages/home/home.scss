@@ -1,0 +1,42 @@
+page-home {
+
+    .container-fluid {
+        padding-top: 20px;
+    }
+
+    .bg-1 { 
+        width: 100%;
+        background-color: #FFB300; 
+        color: #ffffff;
+    }
+    .text-center{
+        text-align: center;
+        padding-bottom: 5px;
+    }
+    .img{
+        border: 2px solid white;
+        width: 150px;
+        height: 150px;
+
+    }
+    .ba-doan-cuoi {
+        margin-top: 20px;
+        line-height: 1.8;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    #cuoi-2{
+        margin-top:20px;
+        border-top: 2px solid grey;
+      
+    }
+    #cuoi-3{
+        border-top: 2px solid grey;
+        margin-top:20px;
+        margin-bottom:30px;
+         text-align: center;
+    }
+
+
+}

@@ -1,0 +1,35 @@
+<ion-header>
+
+  <ion-navbar color="orange">
+    <ion-title>
+      <ion-icon name="log-in"></ion-icon> Đăng nhập </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label floating> ID</ion-label>
+      <ion-input type="text" [(ngModel)]="idf"> </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating> Password</ion-label>
+      <ion-input type="password" [(ngModel)]="passwordf"> </ion-input>
+    </ion-item>
+  </ion-list>
+
+
+  <button ion-button full color="orange" (click)="login(idf,passwordf)">Đăng nhập</button>
+
+
+  <button ion-button block clear (click)="gotosignup()">
+    Đăng Kí
+  </button>
+  <button ion-button block clear (click)="gotoreset()">
+   Quên mật khẩu
+  </button>
+
+</ion-content>

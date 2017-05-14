@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar color="orange">
+    <ion-title>Edit Profile</ion-title>
+  </ion-navbar>
+
+
+</ion-header>
+
+
+
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label stacked> Email</ion-label>
+      <ion-input type="text" [(ngModel)]="userProfile.email"> </ion-input>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label stacked> Họ Tên</ion-label>
+      <ion-input type="text" [(ngModel)]="userProfile.name"> </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Số điện thoại </ion-label>
+      <ion-input type="number" [(ngModel)]="userProfile.phonenumber"> </ion-input>
+    </ion-item>
+
+  </ion-list>
+
+
+  <button ion-button full color="orange" (click)="edit()">Edit</button>
+
+</ion-content>
