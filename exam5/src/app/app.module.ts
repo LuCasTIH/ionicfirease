@@ -14,9 +14,12 @@ import { MapPage } from '../pages/map/map';
 import {AngularFireModule} from 'angularfire2';
 import { TabsPage } from "../pages/tabs/tabs";
 import { ListPage } from "../pages/list/list";
-import { Geolocation } from '@ionic-native/geolocation';
+
 import { Camera } from '@ionic-native/camera';
 import { Device } from "@ionic-native/device";
+import { ProfiletabsPage } from "../pages/profiletabs/profiletabs";
+import { BookingPage } from "../pages/booking/booking";
+import { VehiclePage } from "../pages/vehicle/vehicle";
 const firebaseConfig = {
     apiKey: "AIzaSyCi-VjhHR_vNmpA0gYCIJ25uDomjFYS-XA",
     authDomain: "zxczxc-c727c.firebaseapp.com",
@@ -38,6 +41,9 @@ const firebaseConfig = {
     MapPage,
     TabsPage,
     ListPage,
+    ProfiletabsPage,
+    BookingPage,
+    VehiclePage
   
   
   ],
@@ -57,6 +63,9 @@ const firebaseConfig = {
     MapPage,
     TabsPage,
     ListPage,
+    ProfiletabsPage,
+    VehiclePage,
+    BookingPage,
     
   ],
   providers: [
@@ -64,7 +73,6 @@ const firebaseConfig = {
     SplashScreen,
 
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    Geolocation,
     Camera,
     Device
 

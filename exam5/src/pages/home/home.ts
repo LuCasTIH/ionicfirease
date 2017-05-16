@@ -1,17 +1,18 @@
 
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, Platform } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { EditprofilePage } from '../editprofile/editprofile';
 import { Camera } from '@ionic-native/camera';
 import { Device } from "@ionic-native/device";
-declare var window: any;
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
+  captureDataUrl: any;
 
   userProfile = {
     name: '',
@@ -24,7 +25,7 @@ export class HomePage {
   currentUser: any;
 
   users: FirebaseListObservable<any>;
-  constructor(public navCtrl: NavController, public af: AngularFire, public alertCtrl: AlertController, public camera: Camera, public device: Device) {
+  constructor(public navCtrl: NavController, public af: AngularFire, public alertCtrl: AlertController, public camera: Camera, public device: Device, public platform: Platform) {
 
     var val = window.localStorage.getItem('currentuser');
     this.currentUser = JSON.parse(val);
@@ -58,6 +59,13 @@ export class HomePage {
   changepassword() {
     let mkc = this.alertCtrl.create({
       subTitle: 'Mật khẩu cũ không đúng',
+      buttons: [{
+        text: "Ok",
+        role: 'cancel'
+      }]
+    });
+    let dmktc = this.alertCtrl.create({
+      subTitle: 'Đổi mật khẩu thành công',
       buttons: [{
         text: "Ok",
         role: 'cancel'
@@ -105,6 +113,8 @@ export class HomePage {
               if (data.newpassword == data.repassword) {
                 this.users.update(this.currentUser, {
                   _password: data.newpassword
+                }).then(present => {
+                  dmktc.present();
                 });
               }
               else {
@@ -123,37 +133,39 @@ export class HomePage {
 
   }
 
-
   makeFileIntoBlob(_imagePath) {
 
-    return new Promise((resolve, reject) => {
-      window.resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
+    // INSTALL PLUGIN - cordova plugin add cordova-plugin-file
+  
+      return new Promise((resolve, reject) => {
+        (<any>window).resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
 
-        fileEntry.file((resFile) => {
+          fileEntry.file((resFile) => {
 
-          var reader = new FileReader();
-          reader.onloadend = (evt: any) => {
-            var imgBlob: any = new Blob([evt.target.result], { type: 'image/jpeg' });
-            imgBlob.name = 'sample.jpg';
-            resolve(imgBlob);
-          };
+            var reader = new FileReader();
+            reader.onloadend = (evt: any) => {
+              var imgBlob: any = new Blob([evt.target.result], { type: 'image/jpeg' });
+              imgBlob.name = 'sample.jpg';
+              resolve(imgBlob);
+            };
 
-          reader.onerror = (e) => {
-            console.log('Failed file read: ' + e.toString());
-            reject(e);
-          };
+            reader.onerror = (e) => {
+              console.log('Failed file read: ' + e.toString());
+              reject(e);
+            };
 
-          reader.readAsArrayBuffer(resFile);
+            reader.readAsArrayBuffer(resFile);
+          });
         });
       });
-    });
+   
   }
 
   uploadToFirebase(_imageBlob) {
-    var fileName = this.currentUser + new Date().getTime() + '.jpg';
+    var fileName = 'sample-' + new Date().getTime() + '.jpg';
 
     return new Promise((resolve, reject) => {
-      var fileRef = firebase.storage().ref('images/'+fileName);
+      var fileRef = firebase.storage().ref('images/' + fileName);
 
       var uploadTask = fileRef.put(_imageBlob);
 
@@ -169,19 +181,17 @@ export class HomePage {
   }
 
   saveToDatabaseAssetList(_uploadSnapshot) {
-    var ref = firebase.database().ref('user/'+this.currentUser);
+    var ref = firebase.database().ref('user/' + this.currentUser);
 
     return new Promise((resolve, reject) => {
 
       // we will save meta data of image in database
       var dataToSave = {
         'URL': _uploadSnapshot.downloadURL, // url to access file
-        'name': _uploadSnapshot.metadata.name, // name of the file
-
         'lastUpdated': new Date().getTime(),
       };
 
-      ref.push(dataToSave, (_response) => {
+      ref.update(dataToSave, (_response) => {
         resolve(_response);
       }).catch((_error) => {
         reject(_error);
@@ -190,10 +200,9 @@ export class HomePage {
 
   }
 
-
   getpic() {
-    console.log(Device)
-    let imageSource = (this.device.isVirtual ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.CAMERA);
+
+    let imageSource = (this.device.isVirtual ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.PHOTOLIBRARY);
 
     this.camera.getPicture({
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -221,9 +230,11 @@ export class HomePage {
       alert('Error ' + (_error.message || _error));
     });
 
-
-
   }
+
+
+
+
 }
 
 

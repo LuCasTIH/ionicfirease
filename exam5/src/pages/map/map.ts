@@ -8,7 +8,7 @@ import { NavController, Platform } from 'ionic-angular';
 export class MapPage {
 
 
-  constructor(public navCtrl: NavController, public platform: Platform, private geolocation: Geolocation) {
+  constructor(public navCtrl: NavController, public platform: Platform) {
 
 
 }
