@@ -6,7 +6,7 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { EditprofilePage } from '../editprofile/editprofile';
 import { Camera } from '@ionic-native/camera';
 import { Device } from "@ionic-native/device";
-
+declare var window: any;
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -133,12 +133,10 @@ export class HomePage {
 
   }
 
-  makeFileIntoBlob(_imagePath) {
+   makeFileIntoBlob(_imagePath) {
 
-    // INSTALL PLUGIN - cordova plugin add cordova-plugin-file
-  
       return new Promise((resolve, reject) => {
-        (<any>window).resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
+        window.resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
 
           fileEntry.file((resFile) => {
 
@@ -158,7 +156,7 @@ export class HomePage {
           });
         });
       });
-   
+
   }
 
   uploadToFirebase(_imageBlob) {
@@ -200,15 +198,15 @@ export class HomePage {
 
   }
 
-  getpic() {
+    getpic() {
 
-    let imageSource = (this.device.isVirtual ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.PHOTOLIBRARY);
+  let imageSource = (this.device.isVirtual ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.PHOTOLIBRARY);
 
-    this.camera.getPicture({
-      destinationType: this.camera.DestinationType.FILE_URI,
-      sourceType: imageSource,
-      targetHeight: 640,
-      correctOrientation: true
+  this.camera.getPicture({
+    destinationType: this.camera.DestinationType.FILE_URI,
+    sourceType: imageSource,
+    targetHeight: 640,
+    correctOrientation: true
     }).then((_imagePath) => {
       alert('got image path ' + _imagePath);
       // convert picture to blob

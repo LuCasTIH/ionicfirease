@@ -11,6 +11,11 @@
     <button ion-button menuToggle left>
     <ion-icon name="menu"></ion-icon>
   </button>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="gotoaddvehicle()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 
@@ -18,5 +23,22 @@
 
 
 <ion-content padding>
-
+  <ion-list>
+    <ion-item-sliding *ngFor="let vehicle of vehicles | async">
+      <ion-item>
+        <p> Loại xe: {{vehicle.loaixe}}</p>
+        <p> Biển số xe: {{vehicle.bsx}}</p>
+        <p> Tên xe: {{vehicle.tenxe}}</p>
+        <p> Hãng xe: {{vehicle.hangxe}}</p>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="secondary" (click)="editcar(car)">
+        <ion-icon name="md-create"> Edit</ion-icon>
+      </button>
+        <button ion-button color="danger" (click)="deletecar(car.$key)">
+        <ion-icon name="md-trash"> Delete</ion-icon>
+      </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>

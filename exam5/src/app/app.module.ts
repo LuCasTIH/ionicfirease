@@ -11,7 +11,7 @@ import { SignupPage } from '../pages/signup/signup';
 import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
 import { EditprofilePage } from '../pages/editprofile/editprofile';
 import { MapPage } from '../pages/map/map';
-import {AngularFireModule} from 'angularfire2';
+import { AngularFireModule } from 'angularfire2';
 import { TabsPage } from "../pages/tabs/tabs";
 import { ListPage } from "../pages/list/list";
 
@@ -20,13 +20,15 @@ import { Device } from "@ionic-native/device";
 import { ProfiletabsPage } from "../pages/profiletabs/profiletabs";
 import { BookingPage } from "../pages/booking/booking";
 import { VehiclePage } from "../pages/vehicle/vehicle";
+import { ModaladdvehiclePage } from "../pages/modaladdvehicle/modaladdvehicle";
+import { ModaleditvehiclePage } from "../pages/modaleditvehicle/modaleditvehicle";
 const firebaseConfig = {
-    apiKey: "AIzaSyCi-VjhHR_vNmpA0gYCIJ25uDomjFYS-XA",
-    authDomain: "zxczxc-c727c.firebaseapp.com",
-    databaseURL: "https://zxczxc-c727c.firebaseio.com",
-    projectId: "zxczxc-c727c",
-    storageBucket: "zxczxc-c727c.appspot.com",
-    messagingSenderId: "274529849874"
+  apiKey: "AIzaSyCi-VjhHR_vNmpA0gYCIJ25uDomjFYS-XA",
+  authDomain: "zxczxc-c727c.firebaseapp.com",
+  databaseURL: "https://zxczxc-c727c.firebaseio.com",
+  projectId: "zxczxc-c727c",
+  storageBucket: "zxczxc-c727c.appspot.com",
+  messagingSenderId: "274529849874"
 };
 
 
@@ -43,9 +45,11 @@ const firebaseConfig = {
     ListPage,
     ProfiletabsPage,
     BookingPage,
-    VehiclePage
-  
-  
+    VehiclePage,
+    ModaladdvehiclePage,
+    ModaleditvehiclePage
+
+
   ],
   imports: [
     BrowserModule,
@@ -66,16 +70,18 @@ const firebaseConfig = {
     ProfiletabsPage,
     VehiclePage,
     BookingPage,
-    
+    ModaladdvehiclePage,
+    ModaleditvehiclePage
+
   ],
   providers: [
     StatusBar,
     SplashScreen,
 
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     Camera,
     Device
 
   ]
 })
-export class AppModule {}
+export class AppModule { }
