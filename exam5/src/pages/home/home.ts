@@ -20,6 +20,7 @@ export class HomePage {
     phonenumber: '',
     cmnd: '',
     email: '',
+    url: null
   };
 
   currentUser: any;
@@ -45,6 +46,7 @@ export class HomePage {
       this.userProfile.password = user._password;
       this.userProfile.phonenumber = user.phonenumber;
       this.userProfile.name = user.name;
+      this.userProfile.url=user.url;
 
       return false;
 
