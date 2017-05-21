@@ -6,12 +6,18 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { EditprofilePage } from '../editprofile/editprofile';
 import { Camera } from '@ionic-native/camera';
 import { Device } from "@ionic-native/device";
-declare var window: any;
+import { ImageProvider } from "../../providers/image/image";
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from "@ionic-native/file-path";
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
+  nativepath: any;
+  userimg: any;
+
   captureDataUrl: any;
 
   userProfile = {
@@ -24,9 +30,10 @@ export class HomePage {
   };
 
   currentUser: any;
-
+  firestore = firebase.storage();
   users: FirebaseListObservable<any>;
-  constructor(public navCtrl: NavController, public af: AngularFire, public alertCtrl: AlertController, public camera: Camera, public device: Device, public platform: Platform) {
+  constructor(public navCtrl: NavController, public af: AngularFire, public alertCtrl: AlertController, public camera: Camera, public device: Device, public platform: Platform, public img: ImageProvider
+    , public filechooser: FileChooser, public filepath: FilePath) {
 
     var val = window.localStorage.getItem('currentuser');
     this.currentUser = JSON.parse(val);
@@ -46,7 +53,7 @@ export class HomePage {
       this.userProfile.password = user._password;
       this.userProfile.phonenumber = user.phonenumber;
       this.userProfile.name = user.name;
-      this.userProfile.url=user.url;
+      this.userProfile.url = user.url;
 
       return false;
 
@@ -135,37 +142,38 @@ export class HomePage {
 
   }
 
-   makeFileIntoBlob(_imagePath) {
+  makeFileIntoBlob(_imagePath) {
 
-      return new Promise((resolve, reject) => {
-        window.resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
+    return new Promise((resolve, reject) => {
+      (<any>window).resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
 
-          fileEntry.file((resFile) => {
+        fileEntry.file((resFile) => {
 
-            var reader = new FileReader();
-            reader.onloadend = (evt: any) => {
-              var imgBlob: any = new Blob([evt.target.result], { type: 'image/jpeg' });
-              imgBlob.name = 'sample.jpg';
-              resolve(imgBlob);
-            };
+          var reader = new FileReader();
+          reader.readAsArrayBuffer(resFile);
+          reader.onloadend = (evt: any) => {
+            var imgBlob: any = new Blob([evt.target.result], { type: 'image/jpeg' });
+          
+            resolve(imgBlob);
+          };
 
-            reader.onerror = (e) => {
-              console.log('Failed file read: ' + e.toString());
-              reject(e);
-            };
+          reader.onerror = (e) => {
+            console.log('Failed file read: ' + e.toString());
+            reject(e);
+          };
 
-            reader.readAsArrayBuffer(resFile);
-          });
+
         });
       });
+    });
 
   }
 
   uploadToFirebase(_imageBlob) {
-    var fileName = 'sample-' + new Date().getTime() + '.jpg';
+    var fileName = this.currentUser + '.jpg';
 
     return new Promise((resolve, reject) => {
-      var fileRef = firebase.storage().ref('images/' + fileName);
+      var fileRef = firebase.storage().ref(fileName);
 
       var uploadTask = fileRef.put(_imageBlob);
 
@@ -200,15 +208,15 @@ export class HomePage {
 
   }
 
-    getpic() {
+  getpic() {
 
-  let imageSource = (this.device.isVirtual ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.PHOTOLIBRARY);
+    let imageSource = (this.device.isVirtual ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.PHOTOLIBRARY);
 
-  this.camera.getPicture({
-    destinationType: this.camera.DestinationType.FILE_URI,
-    sourceType: imageSource,
-    targetHeight: 640,
-    correctOrientation: true
+    this.camera.getPicture({
+      destinationType: this.camera.DestinationType.FILE_URI,
+      sourceType: imageSource,
+      targetHeight: 640,
+      correctOrientation: true
     }).then((_imagePath) => {
       alert('got image path ' + _imagePath);
       // convert picture to blob
@@ -231,8 +239,22 @@ export class HomePage {
     });
 
   }
-
-
+  /*
+   getpic() {
+     this.img.selectImage().then((data) => {
+       alert("got path: " + data);
+       this.img.uploadImage(data).then(snapshot => {
+         alert("upload succes");
+         let uploadedImage: any = snapshot.downloadURL;
+         this.users.update(this.currentUser, {
+           url: uploadedImage,
+         }).then(()=>{
+           alert("add sucess");
+         })
+       });
+     });
+   }
+ */
 
 
 }

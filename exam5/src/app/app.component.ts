@@ -26,7 +26,7 @@ export class MyApp {
     }
 
     this.pages = [
-      { title: 'Home', component: TabsPage },
+      { title: 'Trạm sửa xe', component: TabsPage },
       { title: "Thông tin của bạn", component: ProfiletabsPage },
       { title: "Sửa xe", component: BookingPage },
 

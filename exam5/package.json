@@ -21,32 +21,42 @@
         "@ionic-native/camera": "^3.7.0",
         "@ionic-native/core": "^3.7.0",
         "@ionic-native/device": "^3.7.0",
+        "@ionic-native/file": "^3.10.2",
+        "@ionic-native/file-chooser": "^3.10.2",
+        "@ionic-native/file-path": "^3.10.2",
         "@ionic-native/geolocation": "^3.7.0",
         "@ionic-native/google-maps": "^3.7.0",
+        "@ionic-native/network": "^3.10.2",
         "@ionic-native/splash-screen": "3.4.2",
         "@ionic-native/status-bar": "3.4.2",
         "@ionic/storage": "2.0.1",
+        "@types/google-maps": "^3.2.0",
         "@types/jasmine": "^2.5.47",
         "angularfire2": "^2.0.0-beta.8",
-        "firebase": "^3.8.0",
-        "ionic-angular": "3.0.1",
-        "ionic-native": "^3.5.0",
-        "ionicons": "3.0.0",
-        "rxjs": "5.1.1",
-        "sw-toolbox": "3.4.0",
-        "zone.js": "^0.8.4",
+        "cordova-android": "^6.2.3",
+        "cordova-ios": "^4.4.0",
         "cordova-plugin-console": "1.0.5",
         "cordova-plugin-device": "~1.1.4",
         "cordova-plugin-file": "~4.3.3",
+        "cordova-plugin-filepath": "^1.0.2",
+        "cordova-plugin-googlemaps-sdk": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps-sdk.git",
+        "cordova-plugin-network-information": "~1.3.3",
         "cordova-plugin-splashscreen": "~4.0.1",
         "cordova-plugin-statusbar": "2.2.1",
         "cordova-plugin-whitelist": "1.3.1",
-        "ionic-plugin-keyboard": "~2.2.1"
+        "firebase": "^3.8.0",
+        "ionic-angular": "3.0.1",
+        "ionic-native": "^3.5.0",
+        "ionic-plugin-keyboard": "~2.2.1",
+        "ionicons": "3.0.0",
+        "rxjs": "5.1.1",
+        "sw-toolbox": "3.4.0",
+        "zone.js": "^0.8.4"
     },
     "devDependencies": {
         "@ionic/app-scripts": "1.3.0",
-        "@ionic/cli-plugin-cordova": "1.0.0",
-        "@ionic/cli-plugin-ionic-angular": "1.0.0",
+        "@ionic/cli-plugin-cordova": "1.1.2",
+        "@ionic/cli-plugin-ionic-angular": "1.1.2",
         "typescript": "~2.2.1"
     },
     "cordovaPlugins": [
@@ -58,7 +68,7 @@
         "ionic-plugin-keyboard"
     ],
     "cordovaPlatforms": [],
-    "description": "exam5: An Ionic project",
+    "description": "Uber: Uber Sửa Xe",
     "cordova": {
         "plugins": {
             "cordova-plugin-file": {},
@@ -67,7 +77,14 @@
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
-            "ionic-plugin-keyboard": {}
-        }
+            "ionic-plugin-keyboard": {},
+            "cordova-plugin-network-information": {},
+            "cordova-plugin-filepath": {},
+            "cordova-plugin-camera": {}
+        },
+        "platforms": [
+            "android",
+            "ios"
+        ]
     }
 }

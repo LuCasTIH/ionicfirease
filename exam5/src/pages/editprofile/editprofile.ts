@@ -12,7 +12,7 @@ export class EditprofilePage {
     name: '',
     email: '',
     phonenumber: '',
-  
+
   };
 
   currentUser: any;
@@ -28,7 +28,7 @@ export class EditprofilePage {
       this.userProfile.email = user.email;
       this.userProfile.phonenumber = user.phonenumber;
       this.userProfile.name = user.name;
-      
+
 
       return false;
 
@@ -36,6 +36,7 @@ export class EditprofilePage {
   }
 
   edit() {
+
     this.users.update(this.currentUser, {
       email: this.userProfile.email,
       name: this.userProfile.name,

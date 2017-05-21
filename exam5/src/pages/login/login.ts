@@ -25,12 +25,15 @@ export class LoginPage {
   }
 
   login(idf, passwordf) {
-    firebase.database().ref("user/" + idf).once("value", (snapshot) => {
-      var user = snapshot.val();
-      this.idref = snapshot.key;
-      this.passwordref = user._password;
-
-      return false;
+    firebase.database().ref("user").once("value", (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        var user = childSnapshot.val();
+        if (user.id == idf) {
+          this.idref = user.id;
+          this.passwordref=user._password ;
+        }
+        return false;
+      });
 
     }).then(login => {
 

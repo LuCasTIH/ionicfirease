@@ -32,10 +32,10 @@
         <p> Hãng xe: {{vehicle.hangxe}}</p>
       </ion-item>
       <ion-item-options side="right">
-        <button ion-button color="secondary" (click)="editcar(car)">
+        <button ion-button color="secondary" (click)="gotoeditvehicle(vehicle)">
         <ion-icon name="md-create"> Edit</ion-icon>
       </button>
-        <button ion-button color="danger" (click)="deletecar(car.$key)">
+        <button ion-button color="danger" (click)="deletevehicle(vehicle.$key)">
         <ion-icon name="md-trash"> Delete</ion-icon>
       </button>
       </ion-item-options>
