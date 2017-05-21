@@ -99,9 +99,9 @@ export class ImageProvider {
         fileRef.getMetadata().then(function (_metadata) {
 
           // save a reference to the image for listing purposes
-          var ref = firebase.database().ref('user/'+this.currentUser);
+          var ref = firebase.database().ref('user/' + this.currentUser);
           ref.update({
-            'imageURL': downloadURL,
+            url: downloadURL,
 
           });
           observer.next(uploadTask)
