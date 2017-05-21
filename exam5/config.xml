@@ -42,4 +42,5 @@
     <plugin name="cordova-plugin-file" spec="~4.3.3" />
     <plugin name="cordova-plugin-camera" spec="~2.4.1" />
     <plugin name="cordova-plugin-device" spec="~1.1.4" />
+    <plugin name="cordova-plugin-x-toast" spec="^2.6.0" />
 </widget>

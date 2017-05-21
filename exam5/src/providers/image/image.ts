@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import 'rxjs/add/operator/map';
+import { Observable } from "rxjs/Observable";
 import { Camera, CameraOptions } from '@ionic-native/camera';
 /*
   Generated class for the ImageProvider provider.
@@ -10,10 +11,12 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 */
 @Injectable()
 export class ImageProvider {
+  currentUser: any;
   cameraImage: string;
 
   constructor(public _CAMERA: Camera) {
-
+    var val = window.localStorage.getItem('currentuser');
+    this.currentUser = JSON.parse(val);
   }
 
   selectImage(): Promise<any> {
@@ -71,6 +74,43 @@ export class ImageProvider {
         (success) => {
           resolve(parseUpload.snapshot);
         });
+    });
+  }
+  uploadPhotoFromFile(_imageData, _progress) {
+
+
+    return new Observable(observer => {
+      var _time = new Date().getTime()
+      var fileRef = firebase.storage().ref('images/sample-' + _time + '.jpg')
+      var uploadTask = fileRef.put(_imageData['blob']);
+
+      uploadTask.on('state_changed', function (snapshot) {
+        console.log('state_changed', snapshot);
+        _progress && _progress(snapshot)
+      }, function (error) {
+        console.log(JSON.stringify(error));
+        observer.error(error)
+      }, function () {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        var downloadURL = uploadTask.snapshot.downloadURL;
+
+        // Metadata now contains the metadata for file
+        fileRef.getMetadata().then(function (_metadata) {
+
+          // save a reference to the image for listing purposes
+          var ref = firebase.database().ref('user/'+this.currentUser);
+          ref.update({
+            'imageURL': downloadURL,
+
+          });
+          observer.next(uploadTask)
+        }).catch(function (error) {
+          // Uh-oh, an error occurred!
+          observer.error(error)
+        });
+
+      });
     });
   }
 }
