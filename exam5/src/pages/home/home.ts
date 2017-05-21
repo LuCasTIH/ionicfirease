@@ -144,7 +144,7 @@ export class HomePage {
     prompt.present();
 
   }
-  /*
+  
     makeFileIntoBlob(_imagePath) {
   
       return new Promise((resolve, reject) => {
@@ -161,11 +161,9 @@ export class HomePage {
             };
   
             reader.onerror = (e) => {
-              console.log('Failed file read: ' + e.toString());
+              alert('Failed file read: ' + e.toString());
               reject(e);
             };
-  
-  
           });
         });
       });
@@ -213,12 +211,11 @@ export class HomePage {
   
     getpic() {
   
-      let imageSource = (this.device.isVirtual ? this.camera.PictureSourceType.PHOTOLIBRARY : this.camera.PictureSourceType.PHOTOLIBRARY);
+    
   
       this.camera.getPicture({
         destinationType: this.camera.DestinationType.FILE_URI,
-        sourceType: imageSource,
-        targetHeight: 640,
+        sourceType:  this.camera.PictureSourceType.PHOTOLIBRARY,
         correctOrientation: true
       }).then((_imagePath) => {
         alert('got image path ' + _imagePath);
@@ -242,7 +239,7 @@ export class HomePage {
       });
   
     }
-    */
+    /*
   _pictureUploadProgress = (_progress): void => {
     this.ngZone.run(() => {
       console.log("_pictureUploadProgress", _progress)
@@ -315,7 +312,7 @@ export class HomePage {
     });
   }
 
-
+*/
 
 }
 
