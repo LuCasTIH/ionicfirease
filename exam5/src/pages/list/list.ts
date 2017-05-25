@@ -8,11 +8,9 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class ListPage {
 
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad List');
-  }
 
 }

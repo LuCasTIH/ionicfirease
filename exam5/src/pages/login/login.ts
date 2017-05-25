@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFire } from 'angularfire2';
 import { SignupPage } from '../signup/signup';
-import { HomePage } from '../home/home';
+
 import firebase from 'firebase';
 import { ResetpasswordPage } from "../resetpassword/resetpassword";
+import { TabsPage } from "../tabs/tabs";
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -40,7 +41,7 @@ export class LoginPage {
       if (idf == this.idref && passwordf == this.passwordref) {
         let currentuser = this.idref;
         window.localStorage.setItem('currentuser', JSON.stringify(currentuser));
-        this.navCtrl.setRoot(HomePage);
+        this.navCtrl.setRoot(TabsPage);
       } else {
         console.log(this.idref, this.passwordref);
         let alert = this.alertCtrl.create({

@@ -22,10 +22,9 @@ import { BookingPage } from "../pages/booking/booking";
 import { VehiclePage } from "../pages/vehicle/vehicle";
 import { ModaladdvehiclePage } from "../pages/modaladdvehicle/modaladdvehicle";
 import { ModaleditvehiclePage } from "../pages/modaleditvehicle/modaleditvehicle";
-import { ImageProvider } from '../providers/image/image';
-import { FileChooser } from "@ionic-native/file-chooser";
-import { FilePath } from '@ionic-native/file-path';
-import { Toast } from "@ionic-native/toast";
+import {Geolocation} from '@ionic-native/geolocation'
+
+import { Network } from '@ionic-native/network';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCi-VjhHR_vNmpA0gYCIJ25uDomjFYS-XA",
@@ -85,7 +84,9 @@ const firebaseConfig = {
 
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Camera,
-    Device, ImageProvider, FileChooser, FilePath , Toast
+    Device, 
+    Geolocation,
+    Network
 
   ]
 })

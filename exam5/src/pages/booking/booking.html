@@ -1,13 +1,7 @@
-<!--
-  Generated template for the BookingPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar color="orange">
-    <ion-title>Sửa xe</ion-title>
+    <ion-title>Đặt sửa xe</ion-title>
     <button ion-button menuToggle left>
     <ion-icon name="menu"></ion-icon>
   </button>
@@ -17,5 +11,49 @@
 
 
 <ion-content padding>
+
+  <ion-item>
+    <ion-label floating> Miêu tả hư hại:</ion-label>
+    <ion-input type="text" [(ngModel)]="describef"> </ion-input>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-5>
+        <ion-label>Hình ảnh hư hại:</ion-label>
+      </ion-col>
+      <button ion-button icon-only color="orange" (click)="presentActionSheet()">  <ion-icon name="add"> </ion-icon> </button>
+    </ion-row>
+
+
+    <ion-row>
+      <ion-col col-3 *ngFor="let photo of photos; let id = index">
+        <ion-card class="releative">
+          <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon>
+          <img [src]="photo" *ngIf="photo" />
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <ion-item>
+    <ion-label floating>Chọn hình thức:</ion-label>
+    <ion-select [(ngModel)]="formf">
+      <ion-option value="taicho">Sửa tại chổ</ion-option>
+      <ion-option value="taitram">Kéo xe tới và sửa tại trạm</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating>Chọn xe:</ion-label>
+    <ion-select [(ngModel)]="vehiclef">
+      <ion-option *ngFor="let vehicle of vehicles | async" value="{{ vehicle.bsx }}">{{ vehicle.bsx }} | {{vehicle.tenxe}}</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <button ion-button block color="orange" (click)="sendrequest(describef,formf,vehiclef)"> Gửi yêu cầu </button>
+
+
 
 </ion-content>

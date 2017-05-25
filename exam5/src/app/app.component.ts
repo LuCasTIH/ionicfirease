@@ -22,7 +22,7 @@ export class MyApp {
     if (!this.isloggedin()) {
       this.rootPage = LoginPage;
     } else {
-      this.rootPage = ProfiletabsPage;
+      this.rootPage = TabsPage;
     }
 
     this.pages = [

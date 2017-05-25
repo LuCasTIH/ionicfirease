@@ -1,27 +1,20 @@
 
 import { Component } from '@angular/core';
-import { NavController, AlertController, Platform } from 'ionic-angular';
+import { NavController, AlertController, Platform, LoadingController } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { EditprofilePage } from '../editprofile/editprofile';
 import { Camera } from '@ionic-native/camera';
 import { Device } from "@ionic-native/device";
-import { ImageProvider } from "../../providers/image/image";
-import { FileChooser } from '@ionic-native/file-chooser';
-import { FilePath } from "@ionic-native/file-path";
 
-import { NgZone } from '@angular/core';
-import { Toast } from '@ionic-native/toast';
+
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  images: {};
-  nativepath: any;
-  userimg: any;
-  progress: number = 0
-  captureDataUrl: any;
+
 
   userProfile = {
     name: '',
@@ -35,8 +28,11 @@ export class HomePage {
   currentUser: any;
   firestore = firebase.storage();
   users: FirebaseListObservable<any>;
-  constructor(public navCtrl: NavController, public af: AngularFire, public alertCtrl: AlertController, public camera: Camera, public device: Device, public platform: Platform, public img: ImageProvider
-    , public filechooser: FileChooser, public filepath: FilePath, public ngZone: NgZone, public toast: Toast) {
+  loader = this.loadingCtrl.create({
+    content: "Xin chờ 1 lát...",
+    duration: 3000
+  });
+  constructor(public navCtrl: NavController, public af: AngularFire, public alertCtrl: AlertController, public camera: Camera, public device: Device, public platform: Platform, public loadingCtrl: LoadingController) {
 
     var val = window.localStorage.getItem('currentuser');
     this.currentUser = JSON.parse(val);
@@ -61,6 +57,7 @@ export class HomePage {
       return false;
 
     });
+
 
   }
 
@@ -144,175 +141,100 @@ export class HomePage {
     prompt.present();
 
   }
-  
-    makeFileIntoBlob(_imagePath) {
-  
-      return new Promise((resolve, reject) => {
-        (<any>window).resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
-  
-          fileEntry.file((resFile) => {
-  
-            var reader = new FileReader();
-            reader.readAsArrayBuffer(resFile);
-            reader.onloadend = (evt: any) => {
-              var imgBlob: any = new Blob([evt.target.result], { type: 'image/jpeg' });
-            
-              resolve(imgBlob);
-            };
-  
-            reader.onerror = (e) => {
-              alert('Failed file read: ' + e.toString());
-              reject(e);
-            };
-          });
+
+  makeFileIntoBlob(_imagePath) {
+
+    return new Promise((resolve, reject) => {
+      (<any>window).resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
+
+        fileEntry.file((resFile) => {
+
+          var reader = new FileReader();
+          reader.readAsArrayBuffer(resFile);
+          reader.onloadend = (evt: any) => {
+            var imgBlob: any = new Blob([evt.target.result], { type: 'image/jpeg' });
+
+            resolve(imgBlob);
+          };
+
+          reader.onerror = (e) => {
+            alert('Failed file read: ' + e.toString());
+            reject(e);
+          };
         });
       });
-  
-    }
-  
-    uploadToFirebase(_imageBlob) {
-      var fileName = this.currentUser + '.jpg';
-  
-      return new Promise((resolve, reject) => {
-        var fileRef = firebase.storage().ref(fileName);
-  
-        var uploadTask = fileRef.put(_imageBlob);
-  
-        uploadTask.on('state_changed', (_snapshot) => {
-          console.log('snapshot progess ' + _snapshot);
-        }, (_error) => {
-          reject(_error);
-        }, () => {
-          // completion...
-          resolve(uploadTask.snapshot);
-        });
-      });
-    }
-  
-    saveToDatabaseAssetList(_uploadSnapshot) {
-      var ref = firebase.database().ref('user/' + this.currentUser);
-  
-      return new Promise((resolve, reject) => {
-  
-        // we will save meta data of image in database
-        var dataToSave = {
-          'URL': _uploadSnapshot.downloadURL, // url to access file
-          'lastUpdated': new Date().getTime(),
-        };
-  
-        ref.update(dataToSave, (_response) => {
-          resolve(_response);
-        }).catch((_error) => {
-          reject(_error);
-        });
-      });
-  
-    }
-  
-    getpic() {
-  
-    
-  
-      this.camera.getPicture({
-        destinationType: this.camera.DestinationType.FILE_URI,
-        sourceType:  this.camera.PictureSourceType.PHOTOLIBRARY,
-        correctOrientation: true
-      }).then((_imagePath) => {
-        alert('got image path ' + _imagePath);
-        // convert picture to blob
-        return this.makeFileIntoBlob(_imagePath);
-      }).then((_imageBlob) => {
-        alert('got image blob ' + _imageBlob);
-  
-        // upload the blob
-        return this.uploadToFirebase(_imageBlob);
-      }).then((_uploadSnapshot: any) => {
-        alert('file uploaded successfully  ' + _uploadSnapshot.downloadURL);
-  
-        // store reference to storage in database
-        return this.saveToDatabaseAssetList(_uploadSnapshot);
-  
-      }).then((_uploadSnapshot: any) => {
-        alert('file saved to asset catalog successfully  ');
+    });
+
+  }
+
+  uploadToFirebase(_imageBlob) {
+    var fileName = this.currentUser + '.jpg';
+
+    return new Promise((resolve, reject) => {
+      var fileRef = firebase.storage().ref(fileName);
+
+      var uploadTask = fileRef.put(_imageBlob);
+
+      uploadTask.on('state_changed', (_snapshot) => {
+        console.log('snapshot progess ' + _snapshot);
       }, (_error) => {
-        alert('Error ' + (_error.message || _error));
+        reject(_error);
+      }, () => {
+        // completion...
+        resolve(uploadTask.snapshot);
       });
-  
-    }
-    /*
-  _pictureUploadProgress = (_progress): void => {
-    this.ngZone.run(() => {
-      console.log("_pictureUploadProgress", _progress)
-      this.progress = Math.round((_progress.bytesTransferred / _progress.totalBytes) * 100);
-      if (this.progress === 100) {
-        setTimeout(() => { this.progress = 0 }, 500);
-      }
-    })
+    });
+  }
+
+  saveToDatabaseAssetList(_uploadSnapshot) {
+    var ref = firebase.database().ref('user/' + this.currentUser);
+
+    return new Promise((resolve, reject) => {
+
+
+      var dataToSave = {
+        'url': _uploadSnapshot.downloadURL,
+
+      };
+
+      ref.update(dataToSave, (_response) => {
+        resolve(_response);
+      }).catch((_error) => {
+        reject(_error);
+      });
+    });
+
   }
 
   getpic() {
     this.camera.getPicture({
       destinationType: this.camera.DestinationType.FILE_URI,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      quality: 100,
       correctOrientation: true
-    }).then((imageData) => {
-      // imageData is a file path
+    }).then((_imagePath) => {
+      this.loader.present();
+      return this.makeFileIntoBlob(_imagePath);
+    }).then((_imageBlob) => {
 
-      // get the path correct for android devices
-      if (this.platform.is("android")) {
-        imageData = "file://" + imageData
-      }
 
-      (<any>window).resolveLocalFileSystemURL(imageData, (fileEntry) => {
+      // upload the blob
+      return this.uploadToFirebase(_imageBlob);
+    }).then((_uploadSnapshot: any) => {
 
-        fileEntry.file((resFile) => {
 
-          var reader = new FileReader();
-          reader.onloadend = (evt: any) => {
+      // store reference to storage in database
+      return this.saveToDatabaseAssetList(_uploadSnapshot);
 
-            var imgBlob: any = new Blob([evt.target.result], { type: 'image/jpeg' });
-            imgBlob.name = 'sample.jpg';
-
-            this.images['blob'] = imgBlob;
-
-            this.img.uploadPhotoFromFile(this.images, this._pictureUploadProgress)
-              .subscribe((data) => {
-                console.log(data)
-
-                this.toast.show("File Uploaded Successfully", "1000", "center").subscribe(
-                  toast => {
-                    console.log(toast);
-                  }
-                );
-              },
-              (error) => {
-                console.log(error)
-                this.toast.show("File Error" + error, "5000", "center").subscribe(
-                  toast => {
-                    console.log(toast);
-                  }
-                );
-              },
-              () => { });
-          };
-          reader.onerror = (e) => {
-            console.log("Failed file read: " + e.toString());
-          };
-          reader.readAsArrayBuffer(resFile);
-
-        });
-      }, (err) => {
-        console.log(err);
-        alert(JSON.stringify(err))
-      });
-
-    }, (err) => {
-      console.log("resolveLocalFileSystemURL", err);
-      alert(JSON.stringify(err))
+    }).then((_uploadSnapshot: any) => {
+      this.loader.dismiss();
+    }, (_error) => {
+      alert('Error ' + (_error.message || _error));
     });
+
   }
 
-*/
+
 
 }
 
