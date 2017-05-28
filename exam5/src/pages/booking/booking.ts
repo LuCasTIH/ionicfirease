@@ -4,17 +4,18 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Camera } from "@ionic-native/camera";
 import { Geolocation } from '@ionic-native/geolocation';
 import firebase from 'firebase';
+import { TabsPage } from "../tabs/tabs";
 @Component({
   selector: 'page-booking',
   templateUrl: 'booking.html',
 })
 export class BookingPage {
+  imgb64: string;
+  photodisplay: any = [];
   currentUser: any;
   photos: any = [];
   vehicles: FirebaseListObservable<any>;
-  a: number = 0;
-  latitude: any;
-  longitude: any;
+
   loader = this.loadingCtrl.create({
     content: "Xin chờ 1 lát...",
     duration: 3000
@@ -28,14 +29,6 @@ export class BookingPage {
   }
 
 
-  userlocation() {
-    this.geolocation.getCurrentPosition().then(respon => {
-      this.latitude = respon.coords.latitude;
-      this.longitude = respon.coords.longitude;
-    }).catch((error) => {
-      alert(error);
-    });
-  }
 
 
 
@@ -56,7 +49,8 @@ export class BookingPage {
             text: 'Xóa',
             handler: () => {
               this.photos.splice(index, 1);
-
+              this.photodisplay.splice(index, 1);
+              console.log('deleted');
             }
           }
         ]
@@ -86,7 +80,33 @@ export class BookingPage {
     });
     actionSheet.present();
   }
-  makeFileIntoBlob(_imagePath) {
+
+
+  b64toBlob(b64Data, sliceSize, contentType) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  }
+
+    makeFileIntoBlob(_imagePath) {
 
     return new Promise((resolve, reject) => {
       (<any>window).resolveLocalFileSystemURL(_imagePath, (fileEntry) => {
@@ -110,51 +130,41 @@ export class BookingPage {
     });
 
   }
-
-
-
   takePicture() {
     this.camera.getPicture({
-      quality: 100,
       destinationType: this.camera.DestinationType.FILE_URI,
       sourceType: this.camera.PictureSourceType.CAMERA,
-      encodingType: this.camera.EncodingType.JPEG,
+      quality: 100,
       correctOrientation: true
-    }).then((_imagePath) => {
-
-      return this.makeFileIntoBlob(_imagePath);
+    }).then(_imagePath => {
+    
+      this.photodisplay.push(_imagePath);
+     return this.makeFileIntoBlob(_imagePath);
     }).then((_imageBlob) => {
-      this.photos[this.a] = _imageBlob;
-      this.a++;
-
-    }, (_error) => {
-      alert('Error ' + (_error.message || _error));
-    });
+      
+      this.photos.push(_imageBlob);
+    })
   }
   grabPicture() {
     this.camera.getPicture({
-      quality: 100,
       destinationType: this.camera.DestinationType.FILE_URI,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      encodingType: this.camera.EncodingType.JPEG,
+      quality: 100,
       correctOrientation: true
-    }).then((_imagePath) => {
-
-      return this.makeFileIntoBlob(_imagePath);
+    }).then(_imagePath => {
+    
+      this.photodisplay.push(_imagePath);
+     return this.makeFileIntoBlob(_imagePath);
     }).then((_imageBlob) => {
-      this.photos[this.a] = _imageBlob;
-      this.a++;
-
-    }, (_error) => {
-      alert('Error ' + (_error.message || _error));
-    });
+      
+      this.photos.push(_imageBlob);
+    })
   }
-
   makeid() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for (var i = 0; i < 5; i++)
+    for (var i = 0; i < 15; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
@@ -169,11 +179,11 @@ export class BookingPage {
       images: null
     }).then(() => {
       this.geolocation.getCurrentPosition().then(respon => {
-         this.af.database.list('booking').update(this.currentUser,
-         {
-          longitude: respon.coords.longitude,
-          latitude: respon.coords.latitude
-        });
+        this.af.database.list('booking').update(this.currentUser,
+          {
+            longitude: respon.coords.longitude,
+            latitude: respon.coords.latitude
+          });
       }).catch((error) => {
         alert(error);
       });
@@ -192,7 +202,8 @@ export class BookingPage {
       }
     }).then(() => {
       this.loader.dismiss();
-    })
+      this.navCtrl.setRoot(TabsPage);
+    });
   }
 
 }

@@ -5,7 +5,8 @@ import { SignupPage } from '../signup/signup';
 
 import firebase from 'firebase';
 import { ResetpasswordPage } from "../resetpassword/resetpassword";
-import { TabsPage } from "../tabs/tabs";
+
+import { BookingPage } from "../booking/booking";
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -25,13 +26,18 @@ export class LoginPage {
     this.navCtrl.push(SignupPage);
   }
 
+  gotoreset() {
+    this.navCtrl.push(ResetpasswordPage);
+  }
+
+
   login(idf, passwordf) {
     firebase.database().ref("user").once("value", (snapshot) => {
       snapshot.forEach((childSnapshot) => {
         var user = childSnapshot.val();
         if (user.id == idf) {
           this.idref = user.id;
-          this.passwordref=user._password ;
+          this.passwordref = user._password;
         }
         return false;
       });
@@ -41,7 +47,7 @@ export class LoginPage {
       if (idf == this.idref && passwordf == this.passwordref) {
         let currentuser = this.idref;
         window.localStorage.setItem('currentuser', JSON.stringify(currentuser));
-        this.navCtrl.setRoot(TabsPage);
+        this.navCtrl.setRoot(BookingPage);
       } else {
         console.log(this.idref, this.passwordref);
         let alert = this.alertCtrl.create({
@@ -58,9 +64,6 @@ export class LoginPage {
     });
   }
 
-  gotoreset() {
-    this.navCtrl.push(ResetpasswordPage);
-  }
 
 }
 

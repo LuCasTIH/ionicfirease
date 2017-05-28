@@ -5,15 +5,14 @@
     <button ion-button menuToggle left>
     <ion-icon name="menu"></ion-icon>
   </button>
-  
+
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <div class="container-fluid bg-1 text-center">
 
-    <img src= {{userProfile.url}}
-      class="img-responsive img margin" style="display:inline" alt="hinh anh">
+    <img src={{userProfile.url}} class="img-responsive img margin" style="display:inline" alt="hinh anh">
 
     <h3> {{userProfile.name}}
       <ion-icon name="camera" (click)="getpic()"></ion-icon>
@@ -41,13 +40,22 @@
           <ion-col col-6 *ngIf="userProfile?.phonenumber">
             {{userProfile.phonenumber}}
           </ion-col>
+        </ion-row>
 
+
+        <ion-row>
+          <ion-col col-5>
+            Câu hỏi bí mật:
+          </ion-col>
+          <ion-col col-7 *ngIf="userProfile?.squestion">
+            {{userProfile.squestion}}
+          </ion-col>
         </ion-row>
 
         <div id="cuoi-3">
           <ion-row>
 
-            <button ion-button color="orange" (click)="editprofile()"> Cap nhat  </button>
+            <button ion-button color="orange" (click)="gotoeditprofile()"> Cap nhat  </button>
 
 
             <button ion-button color="orange" (click)="changepassword()"> Doi mat khau  </button>

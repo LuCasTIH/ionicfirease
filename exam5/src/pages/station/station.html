@@ -1,0 +1,56 @@
+<!--
+  Generated template for the StationPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="orange">
+    <ion-title>{{stationref.title}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content padding>
+   <div class="container-fluid bg-1 text-center">
+    <img src={{stationref.backgroundimg}} class="imgbg-responsive imgbg margin" style="display:inline" alt="hinh anh">
+    <p> Địa chỉ: {{stationref.address}}</p>
+  </div>
+  <div class="detail">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-1>
+          <ion-icon name="call"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <h6>{{stationref.phonenumber}}</h6>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-1>
+          <ion-icon name="alarm"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <h6>{{stationref.workinghour}}</h6>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-1>
+          <ion-icon name="construct"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <h6>{{stationref.describe}}</h6>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+      </div>
+      <div class="hinhanh">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-4 *ngFor="let image of images">
+          <img [src]='image' class="img-responsive img margin" style="display:inline" alt="hinh anh">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+      </div>
+</ion-content>

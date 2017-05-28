@@ -10,7 +10,7 @@ import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { ResetpasswordPage } from '../pages/resetpassword/resetpassword';
 import { EditprofilePage } from '../pages/editprofile/editprofile';
-import { MapPage } from '../pages/map/map';
+
 import { AngularFireModule } from 'angularfire2';
 import { TabsPage } from "../pages/tabs/tabs";
 import { ListPage } from "../pages/list/list";
@@ -23,9 +23,10 @@ import { VehiclePage } from "../pages/vehicle/vehicle";
 import { ModaladdvehiclePage } from "../pages/modaladdvehicle/modaladdvehicle";
 import { ModaleditvehiclePage } from "../pages/modaleditvehicle/modaleditvehicle";
 import {Geolocation} from '@ionic-native/geolocation'
-
+import { GoogleMaps } from '@ionic-native/google-maps';
 import { Network } from '@ionic-native/network';
-
+import { StationPage } from "../pages/station/station";
+import { MapPage } from "../pages/map/map";
 const firebaseConfig = {
   apiKey: "AIzaSyCi-VjhHR_vNmpA0gYCIJ25uDomjFYS-XA",
   authDomain: "zxczxc-c727c.firebaseapp.com",
@@ -51,14 +52,16 @@ const firebaseConfig = {
     BookingPage,
     VehiclePage,
     ModaladdvehiclePage,
-    ModaleditvehiclePage
+    ModaleditvehiclePage,
+    StationPage
 
 
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(firebaseConfig),
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -75,7 +78,8 @@ const firebaseConfig = {
     VehiclePage,
     BookingPage,
     ModaladdvehiclePage,
-    ModaleditvehiclePage
+    ModaleditvehiclePage,
+    StationPage
 
   ],
   providers: [
@@ -86,7 +90,8 @@ const firebaseConfig = {
     Camera,
     Device, 
     Geolocation,
-    Network
+    Network,
+    GoogleMaps
 
   ]
 })

@@ -16,6 +16,13 @@
 
 </ion-header>
 
-<ion-content>
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let location of locations" (click)="gotostation(location.key)">
+      <h2> {{location.title}}</h2>
+      <p> {{location.distance}} km</p>
+    </ion-item>
 
+
+  </ion-list>
 </ion-content>

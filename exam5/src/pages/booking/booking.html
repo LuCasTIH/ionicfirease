@@ -27,7 +27,7 @@
 
 
     <ion-row>
-      <ion-col col-3 *ngFor="let photo of photos; let id = index">
+      <ion-col col-3 *ngFor="let photo of photodisplay; let id = index">
         <ion-card class="releative">
           <ion-icon ios="ios-add-circle" md="md-add-circle" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon>
           <img [src]="photo" *ngIf="photo" />
@@ -40,8 +40,8 @@
   <ion-item>
     <ion-label floating>Chọn hình thức:</ion-label>
     <ion-select [(ngModel)]="formf">
-      <ion-option value="taicho">Sửa tại chổ</ion-option>
-      <ion-option value="taitram">Kéo xe tới và sửa tại trạm</ion-option>
+      <ion-option value="Sửa tại chổ">Sửa tại chổ</ion-option>
+      <ion-option value="Kéo xe tới và sửa tại trạm">Kéo xe tới và sửa tại trạm</ion-option>
     </ion-select>
   </ion-item>
 

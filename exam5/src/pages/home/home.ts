@@ -22,6 +22,7 @@ export class HomePage {
     phonenumber: '',
     cmnd: '',
     email: '',
+    squestion: '',
     url: null
   };
 
@@ -32,36 +33,31 @@ export class HomePage {
     content: "Xin chờ 1 lát...",
     duration: 3000
   });
-  constructor(public navCtrl: NavController, public af: AngularFire, public alertCtrl: AlertController, public camera: Camera, public device: Device, public platform: Platform, public loadingCtrl: LoadingController) {
-
+  constructor(public navCtrl: NavController, public af: AngularFire, public alertCtrl: AlertController, 
+  public camera: Camera, public device: Device, public platform: Platform, public loadingCtrl: LoadingController) {
+    
     var val = window.localStorage.getItem('currentuser');
     this.currentUser = JSON.parse(val);
     this.users = this.af.database.list('user');
-
   }
-
-
-
 
   ionViewDidEnter() {
-    var ref = firebase.database().ref("user/" + this.currentUser);
-    ref.once("value", (snapshot) => {
-      var user = snapshot.val();
-
-      this.userProfile.email = user.email;
-      this.userProfile.password = user._password;
-      this.userProfile.phonenumber = user.phonenumber;
-      this.userProfile.name = user.name;
-      this.userProfile.url = user.url;
-
-      return false;
-
-    });
+    firebase.database().ref("user/" + this.currentUser)
+      .once("value", (snapshot) => {
+        var user = snapshot.val();
+        this.userProfile.email = user.email;
+        this.userProfile.password = user._password;
+        this.userProfile.phonenumber = user.phonenumber;
+        this.userProfile.name = user.name;
+        this.userProfile.url = user.url;
+        this.userProfile.squestion = user.squestion;
+        return false;
+      });
 
 
   }
 
-  editprofile() {
+  gotoeditprofile() {
     this.navCtrl.push(EditprofilePage)
   }
 
@@ -186,7 +182,7 @@ export class HomePage {
     });
   }
 
-  saveToDatabaseAssetList(_uploadSnapshot) {
+  saveToDatabase(_uploadSnapshot) {
     var ref = firebase.database().ref('user/' + this.currentUser);
 
     return new Promise((resolve, reject) => {
@@ -224,7 +220,7 @@ export class HomePage {
 
 
       // store reference to storage in database
-      return this.saveToDatabaseAssetList(_uploadSnapshot);
+      return this.saveToDatabase(_uploadSnapshot);
 
     }).then((_uploadSnapshot: any) => {
       this.loader.dismiss();
